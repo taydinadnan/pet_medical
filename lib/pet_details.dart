@@ -37,6 +37,7 @@
 
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
+import 'package:pet_medical/repository/data_repository.dart';
 
 import 'models/pets.dart';
 import 'add_vaccination.dart';
@@ -55,7 +56,7 @@ class PetDetail extends StatefulWidget {
 }
 
 class _PetDetailState extends State<PetDetail> {
-  // TODO Add data repository
+  final DataRepository repository = DataRepository();
   final _formKey = GlobalKey<FormState>();
   final dateFormat = DateFormat('yyyy-MM-dd');
   late List<CategoryOption> animalTypes;
@@ -135,7 +136,8 @@ class _PetDetailState extends State<PetDetail> {
                   MaterialButton(
                       color: Colors.blue.shade600,
                       onPressed: () {
-                        // TODO Delete data
+                        Navigator.of(context).pop();
+                        repository.deletePet(widget.pet);
                       },
                       child: const Text(
                         'Delete',
@@ -144,7 +146,14 @@ class _PetDetailState extends State<PetDetail> {
                   MaterialButton(
                     color: Colors.blue.shade600,
                     onPressed: () async {
-                      // TODO Update data
+                      if (_formKey.currentState?.validate() ?? false) {
+                        Navigator.of(context).pop();
+                        widget.pet.name = name;
+                        widget.pet.type = type;
+                        widget.pet.notes = notes ?? widget.pet.notes;
+
+                        repository.updatePet(widget.pet);
+                      }
                     },
                     child: const Text(
                       'Update',
