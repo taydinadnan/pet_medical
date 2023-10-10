@@ -62,8 +62,8 @@ List<Map<String, dynamic>>? _vaccinationList(List<Vaccination>? vaccinations) {
     return null;
   }
   final vaccinationMap = <Map<String, dynamic>>[];
-  vaccinations.forEach((vaccination) {
+  for (var vaccination in vaccinations) {
     vaccinationMap.add(vaccination.toJson());
-  });
+  }
   return vaccinationMap;
 }

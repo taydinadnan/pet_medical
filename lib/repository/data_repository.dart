@@ -10,7 +10,7 @@ class DataRepository {
   }
 
   Future<DocumentReference> addPet(Pet pet) {
-    return collection.add(pet.toJson);
+    return collection.add(pet.toJson());
   }
 
   void updatePet(Pet pet) async {
