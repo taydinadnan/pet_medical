@@ -6,7 +6,7 @@ class AddPetDialog extends StatefulWidget {
   const AddPetDialog({Key? key}) : super(key: key);
 
   @override
-  _AddPetDialogState createState() => _AddPetDialogState();
+  State<AddPetDialog> createState() => _AddPetDialogState();
 }
 
 class _AddPetDialogState extends State<AddPetDialog> {
@@ -74,6 +74,7 @@ class _AddPetDialogState extends State<AddPetDialog> {
                       Pet(petName!, type: character, vaccinations: []);
                   await repository.addPet(newPet);
                 }
+                // ignore: use_build_context_synchronously
                 Navigator.pop(context);
               },
               child: const Text('Add')),

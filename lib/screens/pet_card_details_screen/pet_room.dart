@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pet_medical/models/pets.dart';
-import 'package:pet_medical/pet_details.dart';
+import 'package:pet_medical/screens/pet_card_details_screen/pet_details.dart';
 
 class PetRoom extends StatelessWidget {
   final Pet pet;
