@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:pet_medical/models/pets.dart';
 import 'package:pet_medical/repository/data_repository.dart';
@@ -70,8 +71,13 @@ class _AddPetDialogState extends State<AddPetDialog> {
           TextButton(
               onPressed: () async {
                 if (petName != null && character.isNotEmpty) {
-                  final newPet =
-                      Pet(petName!, type: character, vaccinations: []);
+                  final user = FirebaseAuth.instance.currentUser;
+                  final newPet = Pet(
+                    petName!,
+                    type: character,
+                    vaccinations: [],
+                    userId: user!.uid,
+                  );
                   await repository.addPet(newPet);
                 }
                 // ignore: use_build_context_synchronously

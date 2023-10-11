@@ -1,45 +1,55 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-
-import 'vaccination.dart';
+import 'package:pet_medical/models/vaccination.dart';
 
 class Pet {
   String name;
   String? notes;
   String type;
   List<Vaccination> vaccinations;
-
   String? referenceId;
+  String userId;
 
   Pet(this.name,
       {this.notes,
       required this.type,
       this.referenceId,
-      required this.vaccinations});
+      required this.vaccinations,
+      required this.userId});
 
   factory Pet.fromSnapshot(DocumentSnapshot snapshot) {
-    final newpet = Pet.fromJson(snapshot.data() as Map<String, dynamic>);
-    newpet.referenceId = snapshot.reference.id;
-    return newpet;
+    final data = snapshot.data() as Map<String, dynamic>;
+    data['userId'] = snapshot.reference.parent.parent?.id ??
+        ''; // Provide a default value if null
+    final newPet = Pet.fromJson(data);
+    newPet.referenceId = snapshot.reference.id;
+    return newPet;
   }
 
-  factory Pet.fromJson(Map<String, dynamic> json) => _petFromJson(json);
+  factory Pet.fromJson(Map<String, dynamic> json) {
+    return Pet(
+      json['name'] as String,
+      notes: json['notes'] as String?,
+      type: json['type'] as String,
+      vaccinations: _convertVaccinations(json['vaccinations'] as List<dynamic>),
+      userId:
+          json['userId'] as String, // Include the user ID in the constructor
+    );
+  }
 
-  Map<String, dynamic> toJson() => _petToJson(this);
+  Map<String, dynamic> toJson() {
+    return {
+      'name': name,
+      'notes': notes,
+      'type': type,
+      'vaccinations': _vaccinationList(vaccinations),
+      'userId': userId, // Include the user ID when converting to JSON
+    };
+  }
 
   @override
   String toString() => 'Pet<$name>';
 }
 
-// 1
-Pet _petFromJson(Map<String, dynamic> json) {
-  return Pet(json['name'] as String,
-      notes: json['notes'] as String?,
-      type: json['type'] as String,
-      vaccinations:
-          _convertVaccinations(json['vaccinations'] as List<dynamic>));
-}
-
-// 2
 List<Vaccination> _convertVaccinations(List<dynamic> vaccinationMap) {
   final vaccinations = <Vaccination>[];
 
@@ -49,17 +59,9 @@ List<Vaccination> _convertVaccinations(List<dynamic> vaccinationMap) {
   return vaccinations;
 }
 
-// 3
-Map<String, dynamic> _petToJson(Pet instance) => <String, dynamic>{
-      'name': instance.name,
-      'notes': instance.notes,
-      'type': instance.type,
-      'vaccinations': _vaccinationList(instance.vaccinations),
-    };
-// 4
-List<Map<String, dynamic>>? _vaccinationList(List<Vaccination>? vaccinations) {
+List<Map<String, dynamic>> _vaccinationList(List<Vaccination>? vaccinations) {
   if (vaccinations == null) {
-    return null;
+    return [];
   }
   final vaccinationMap = <Map<String, dynamic>>[];
   for (var vaccination in vaccinations) {

@@ -7,13 +7,18 @@ import '../../../utils/pets_icons.dart';
 class PetCard extends StatelessWidget {
   final Pet pet;
   final TextStyle boldStyle;
+  final String perCreator;
   final splashColor = {
     'cat': Colors.pink[100],
     'dog': Colors.blue[100],
     'other': Colors.grey[100]
   };
 
-  PetCard({Key? key, required this.pet, required this.boldStyle})
+  PetCard(
+      {Key? key,
+      required this.pet,
+      required this.boldStyle,
+      required this.perCreator})
       : super(key: key);
 
   @override
@@ -28,13 +33,17 @@ class PetCard extends StatelessWidget {
       ),
       splashColor: splashColor[pet.type],
       child: Row(
-        children: <Widget>[
+        children: [
           Expanded(
             child: Padding(
               padding:
                   const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
               child: Text(pet.name, style: boldStyle),
             ),
+          ),
+          Text(
+            perCreator,
+            style: const TextStyle(fontSize: 10),
           ),
           _getPetIcon(pet.type)
         ],

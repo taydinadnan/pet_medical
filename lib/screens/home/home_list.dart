@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:pet_medical/screens/home/widgets/pet_card.dart';
 import 'package:pet_medical/repository/auth.dart';
@@ -36,10 +37,21 @@ class _HomeListState extends State<HomeList> {
     return _buildHome(context);
   }
 
+  final User? user = Auth().currentUser;
+
   Widget _buildHome(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Pets'),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              'Pets : ${user?.email}',
+              style: const TextStyle(fontSize: 12),
+            ),
+            _signOutButton()
+          ],
+        ),
       ),
       body: StreamBuilder<QuerySnapshot>(
           stream: repository.getStream(),
@@ -48,17 +60,12 @@ class _HomeListState extends State<HomeList> {
 
             return _buildList(context, snapshot.data?.docs ?? []);
           }),
-      floatingActionButton: Row(
-        children: [
-          FloatingActionButton(
-            onPressed: () {
-              _addPet();
-            },
-            tooltip: 'Add Pet',
-            child: const Icon(Icons.add),
-          ),
-          _signOutButton()
-        ],
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          _addPet();
+        },
+        tooltip: 'Add Pet',
+        child: const Icon(Icons.add),
       ),
     );
   }
@@ -82,6 +89,10 @@ class _HomeListState extends State<HomeList> {
   Widget _buildListItem(BuildContext context, DocumentSnapshot snapshot) {
     final pet = Pet.fromSnapshot(snapshot);
 
-    return PetCard(pet: pet, boldStyle: boldStyle);
+    return PetCard(
+      pet: pet,
+      boldStyle: boldStyle,
+      perCreator: user!.uid,
+    );
   }
 }

@@ -20,4 +20,8 @@ class DataRepository {
   void deletePet(Pet pet) async {
     await collection.doc(pet.referenceId).delete();
   }
+
+  Stream<QuerySnapshot> getPetsForUser(String userId) {
+    return collection.where('userId', isEqualTo: userId).snapshots();
+  }
 }

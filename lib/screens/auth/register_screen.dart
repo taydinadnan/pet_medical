@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:pet_medical/repository/auth.dart';
+import 'package:pet_medical/repository/user_data.dart';
 import 'package:pet_medical/repository/widget_tree.dart';
 import 'package:pet_medical/screens/auth/widgets/auth_widgets.dart';
 
@@ -55,6 +56,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
           : () {
               createUserWithEmailAndPassword().then((result) {
                 if (result == "success") {
+                  saveUserDataToFirestore(
+                      _emailController.text, _usernameController.text);
                   _navigateToHomeList();
                 }
               });
