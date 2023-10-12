@@ -76,7 +76,7 @@ class _AddPetDialogState extends State<AddPetDialog> {
                     petName!,
                     type: character,
                     vaccinations: [],
-                    userId: user!.uid,
+                    petCreator: user!.uid,
                   );
                   await repository.addPet(newPet);
                 }

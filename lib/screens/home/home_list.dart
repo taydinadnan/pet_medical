@@ -16,28 +16,21 @@ class HomeList extends StatefulWidget {
 }
 
 class _HomeListState extends State<HomeList> {
+  late final User? user;
   final DataRepository repository = DataRepository();
   final boldStyle =
       const TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold);
 
-  Future<void> signOut() async {
-    await Auth().signOut();
+  @override
+  void initState() {
+    super.initState();
+    user = Auth().currentUser;
   }
-
-  Widget _signOutButton() => ElevatedButton(
-      onPressed: () {
-        signOut();
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => const WidgetTree()));
-      },
-      child: const Text('Sign Out'));
 
   @override
   Widget build(BuildContext context) {
     return _buildHome(context);
   }
-
-  final User? user = Auth().currentUser;
 
   Widget _buildHome(BuildContext context) {
     return Scaffold(
@@ -45,11 +38,8 @@ class _HomeListState extends State<HomeList> {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              'Pets : ${user?.email}',
-              style: const TextStyle(fontSize: 12),
-            ),
-            _signOutButton()
+            Text('Pets : ${user?.email}', style: const TextStyle(fontSize: 12)),
+            _signOutButton(),
           ],
         ),
       ),
@@ -58,11 +48,11 @@ class _HomeListState extends State<HomeList> {
           builder: (context, snapshot) {
             if (!snapshot.hasData) return const LinearProgressIndicator();
 
-            return _buildList(context, snapshot.data?.docs ?? []);
+            return _buildPetList(context, snapshot.data?.docs ?? []);
           }),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          _addPet();
+        onPressed: () async {
+          await _addPet();
         },
         tooltip: 'Add Pet',
         child: const Icon(Icons.add),
@@ -70,7 +60,21 @@ class _HomeListState extends State<HomeList> {
     );
   }
 
-  void _addPet() {
+  Future<void> signOut() async {
+    await Auth().signOut();
+    // ignore: use_build_context_synchronously
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => const WidgetTree()));
+  }
+
+  Widget _signOutButton() {
+    return ElevatedButton(
+      onPressed: signOut,
+      child: const Text('Sign Out'),
+    );
+  }
+
+  Future<void> _addPet() async {
     showDialog<Widget>(
       context: context,
       builder: (BuildContext context) {
@@ -79,20 +83,21 @@ class _HomeListState extends State<HomeList> {
     );
   }
 
-  Widget _buildList(BuildContext context, List<DocumentSnapshot>? snapshot) {
+  Widget _buildPetList(BuildContext context, List<DocumentSnapshot>? snapshot) {
     return ListView(
       padding: const EdgeInsets.only(top: 20.0),
-      children: snapshot!.map((data) => _buildListItem(context, data)).toList(),
+      children:
+          snapshot!.map((data) => _buildPetListItem(context, data)).toList(),
     );
   }
 
-  Widget _buildListItem(BuildContext context, DocumentSnapshot snapshot) {
+  Widget _buildPetListItem(BuildContext context, DocumentSnapshot snapshot) {
     final pet = Pet.fromSnapshot(snapshot);
 
     return PetCard(
       pet: pet,
       boldStyle: boldStyle,
-      perCreator: user!.uid,
+      petCreator: user!.uid,
     );
   }
 }
