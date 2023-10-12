@@ -91,7 +91,7 @@ class _HomeListState extends State<HomeList> {
                     : username;
 
                 return Text('$usernameCapitalized\'s Pets',
-                    style: const TextStyle(fontSize: 12));
+                    style: const TextStyle(fontSize: 20));
               }
             },
           ),
@@ -135,11 +135,29 @@ class _HomeListState extends State<HomeList> {
   Widget _buildPetListItem(BuildContext context, DocumentSnapshot snapshot) {
     final pet = Pet.fromSnapshot(snapshot);
 
-    return PetCard(
-      pet: pet,
-      boldStyle: const TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
-      petCreator: user!.uid,
+    pet.name = capitalizeFirstLetterOfEachWord(pet.name);
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      child: PetCard(
+        pet: pet,
+        boldStyle: const TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+        petCreator: user!.uid,
+      ),
     );
+  }
+
+  String capitalizeFirstLetterOfEachWord(String text) {
+    if (text.isEmpty) {
+      return text;
+    }
+    List<String> words = text.split(' ');
+    for (int i = 0; i < words.length; i++) {
+      if (words[i].isNotEmpty) {
+        words[i] = words[i][0].toUpperCase() + words[i].substring(1);
+      }
+    }
+    return words.join(' ');
   }
 
   Future<void> signOut() async {

@@ -52,12 +52,15 @@ class _MyPetsScreenState extends State<MyPetsScreen> {
               itemCount: userPets.length,
               itemBuilder: (context, index) {
                 final pet = userPets[index];
+
+                pet.name = capitalizeFirstLetterOfEachWord(pet.name);
+
                 return ListTile(
                   title: PetCard(
-                      pet: pet,
-                      boldStyle: const TextStyle(fontWeight: FontWeight.bold),
-                      petCreator: user!.uid),
-                  // You can add more details of the pet here
+                    pet: pet,
+                    boldStyle: const TextStyle(fontWeight: FontWeight.bold),
+                    petCreator: user!.uid,
+                  ),
                 );
               },
             )
@@ -65,5 +68,18 @@ class _MyPetsScreenState extends State<MyPetsScreen> {
               child: Text("You don't have any pets yet."),
             ),
     );
+  }
+
+  String capitalizeFirstLetterOfEachWord(String text) {
+    if (text.isEmpty) {
+      return text;
+    }
+    List<String> words = text.split(' ');
+    for (int i = 0; i < words.length; i++) {
+      if (words[i].isNotEmpty) {
+        words[i] = words[i][0].toUpperCase() + words[i].substring(1);
+      }
+    }
+    return words.join(' ');
   }
 }
