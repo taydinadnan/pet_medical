@@ -1,13 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:pet_medical/profile/profile_screen.dart';
 import 'package:pet_medical/repository/user_data.dart';
 import 'package:pet_medical/screens/home/widgets/pet_card.dart';
 import 'package:pet_medical/repository/auth.dart';
 import 'package:pet_medical/repository/data_repository.dart';
 import 'package:pet_medical/repository/widget_tree.dart';
 import 'package:pet_medical/screens/my_pets/my_pets_screen.dart';
+import 'package:pet_medical/screens/profile/profile_screen.dart';
 
 import 'widgets/add_pet_dialog.dart';
 import '../../models/pets.dart';
