@@ -30,4 +30,16 @@ class Auth {
   Future<void> signOut() async {
     await _firebaseAuth.signOut();
   }
+
+  Future<void> deleteUser() async {
+    try {
+      final user = currentUser;
+      if (user != null) {
+        await user.delete();
+      }
+    } catch (e) {
+      // Handle errors, e.g., user not found, user deletion failed, etc.
+      print('Error deleting user: $e');
+    }
+  }
 }

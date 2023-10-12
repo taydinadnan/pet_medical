@@ -42,6 +42,7 @@ class _MyPetsScreenState extends State<MyPetsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    print("PETS COUNT: ${userPets.length}");
     return Scaffold(
       appBar: AppBar(
         title: const Text('My Pets'),

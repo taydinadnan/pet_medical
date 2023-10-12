@@ -108,7 +108,7 @@ class _HomeListState extends State<HomeList> {
       case 1:
         return const MyPetsScreen();
       case 2:
-        return const ProfileScreen();
+        return ProfileScreen();
       default:
         return _homeScreen();
     }
