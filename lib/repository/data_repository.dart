@@ -22,6 +22,6 @@ class DataRepository {
   }
 
   Stream<QuerySnapshot> getPetsForUser(String userId) {
-    return collection.where('userId', isEqualTo: userId).snapshots();
+    return collection.where('petCreator', isEqualTo: userId).snapshots();
   }
 }
