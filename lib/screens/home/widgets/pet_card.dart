@@ -67,15 +67,15 @@ class PetCard extends StatelessWidget {
     );
 
     if (user != null) {
-      return _buildUserListItem(context, user);
+      return buildUserListItem(context, user);
     } else {
       return const Text('User not found');
     }
   }
 
-  Widget _buildUserListItem(BuildContext context, Map<String, dynamic> user) {
-    return Text('Owner: ${user['username']}');
-  }
+  // Widget _buildUserListItem(BuildContext context, Map<String, dynamic> user) {
+  //   return Text('Owner: ${user['username']}');
+  // }
 
   Widget _getPetIcon(String type) {
     final petIconColor = _getPetIconColor(type);

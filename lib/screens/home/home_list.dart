@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:pet_medical/repository/user_data.dart';
 import 'package:pet_medical/screens/home/widgets/pet_card.dart';
 import 'package:pet_medical/repository/auth.dart';
 import 'package:pet_medical/repository/data_repository.dart';
@@ -38,7 +39,25 @@ class _HomeListState extends State<HomeList> {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text('Pets : ${user?.email}', style: const TextStyle(fontSize: 12)),
+            FutureBuilder<Map<String, dynamic>?>(
+              future: getUserData(user!.uid),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const CircularProgressIndicator();
+                } else if (snapshot.hasError) {
+                  return Text('Error: ${snapshot.error}');
+                } else {
+                  final userData = snapshot.data;
+                  final username = userData?['username'] ?? 'User';
+                  final usernameCapitalized = username.isNotEmpty
+                      ? username[0].toUpperCase() + username.substring(1)
+                      : username;
+
+                  return Text('$usernameCapitalized\'s Pets',
+                      style: const TextStyle(fontSize: 12));
+                }
+              },
+            ),
             _signOutButton(),
           ],
         ),

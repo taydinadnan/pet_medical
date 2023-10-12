@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 
 final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
@@ -42,4 +43,8 @@ Future<List<Map<String, dynamic>>> getAllUsers() async {
     print("Error retrieving all users: $e");
     return [];
   }
+}
+
+Widget buildUserListItem(BuildContext context, Map<String, dynamic> user) {
+  return Text('Owner: ${user['username']}');
 }
